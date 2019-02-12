@@ -21,20 +21,20 @@ const cachedFiles = [
     '/img/10.jpg'
 ];
 
-self.addEventListener('install', e => {
-    e.waitUntil(
+self.addEventListener('install', evt => {
+    evt.waitUntil(
         caches.open('v1.0').then( cache => cache.addAll(cachedFiles))
     );
 });
 
-self.addEventListener('fetch', e => {
-    e.respondWith(
-        caches.match(e.request).then( response => {
+self.addEventListener('fetch', evt => {
+    evt.respondWith(
+        caches.match(evt.request).then( response => {
             if (response) {
                 console.log(`${evt.request} Found in cache`);
                 return response;
             } else {
-                console.log(`${e.request} Not in cache. Fetching Woohoo!.`);
+                console.log(`${evt.request} Not in cache. Fetching Woohoo!.`);
                 return fetch(evt.request)
                     .then( response => {
                         if (!response || response.status !== 200 || response.type !== 'basic') {
